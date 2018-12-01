@@ -1,13 +1,22 @@
 -module(frequency).
 -behaviour(gen_server).
 %% aoc day 1 - frequency
--export([count/1, start_link/0]).
+-export([count/1, start_link/0, count_all/1]).
 -export([init/1, handle_call/3, handle_cast/2]).
 
 start_link() ->
 	gen_server:start_link({local, frequency}, frequency, [], []).
 
 init(_) -> {ok, 0}.
+
+count_all(Session) ->
+	{ok, Body} = advent_of_code_client:get(1, Session),
+	BinList = string:split(Body, "\n", all),
+	io:format("~p~n", [BinList]),
+	Fun = fun(Bin) ->
+		Input = binary_to_list(Bin),
+		count(Input) end,
+	lists:map(Fun, BinList).
 
 count([$+|T]) -> gen_server:cast(frequency, {plus, to_intger(T)});
 count([$-|T]) -> gen_server:cast(frequency, {minus, to_intger(T)});
@@ -27,4 +36,5 @@ handle_call(_, _, Frequency) -> Frequency.
 to_intger(List) -> to_intger(lists:reverse(List), 0, 0).
 
 to_intger([], _, Result) -> Result;
-to_intger([N|T], P, Result) -> to_intger(T, P + 1, Result + (N - 48) * trunc(math:pow(10, P))).
+to_intger([N|T], P, Result) ->
+	to_intger(T, P + 1, Result + (N - 48) * trunc(math:pow(10, P))).
