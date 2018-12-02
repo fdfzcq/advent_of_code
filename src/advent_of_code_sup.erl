@@ -33,7 +33,9 @@ start_link() ->
 init([]) ->
 	SupFlags = #{strategy => one_for_one},
 	ChildSpecs =
-		[#{id => frequency, start => {frequency, start_link, []}, modules => [frequency]}],
+		[#{id => chronal_calibration,
+		   start => {chronal_calibration, start_link, []},
+		   modules => [chronal_calibration]}],
     {ok, {SupFlags, ChildSpecs} }.
 
 %%====================================================================

@@ -1,11 +1,11 @@
--module(frequency).
+-module(chronal_calibration).
 -behaviour(gen_server).
 %% aoc day 1 - frequency
 -export([count/1, start_link/0, count_all/1]).
 -export([init/1, handle_call/3, handle_cast/2]).
 
 start_link() ->
-	gen_server:start_link({local, frequency}, frequency, [], []).
+	gen_server:start_link({local, chronal_calibration}, chronal_calibration, [], []).
 
 init(_) -> {ok, 0}.
 
@@ -18,8 +18,8 @@ count_all(Session) ->
 		count(Input) end,
 	lists:map(Fun, BinList).
 
-count([$+|T]) -> gen_server:cast(frequency, {plus, to_intger(T)});
-count([$-|T]) -> gen_server:cast(frequency, {minus, to_intger(T)});
+count([$+|T]) -> gen_server:cast(chronal_calibration, {plus, to_intger(T)});
+count([$-|T]) -> gen_server:cast(chronal_calibration, {minus, to_intger(T)});
 count(_) -> ignored.
 
 handle_cast({plus, N}, Frequency) ->
