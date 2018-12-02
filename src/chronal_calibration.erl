@@ -12,7 +12,6 @@ init(_) -> {ok, 0}.
 count_all(Session) ->
 	{ok, Body} = advent_of_code_client:get(1, Session),
 	BinList = string:split(Body, "\n", all),
-	io:format("~p~n", [BinList]),
 	Fun = fun(Bin) ->
 		Input = binary_to_list(Bin),
 		count(Input) end,
