@@ -6,23 +6,6 @@
 
 process(Session) ->
 	{ok, Body} = advent_of_code_client:get(4, Session),
-% 	Body = <<"[1518-11-01 00:00] Guard #10 begins shift
-% [1518-11-01 00:05] falls asleep
-% [1518-11-01 23:58] Guard #99 begins shift
-% [1518-11-01 00:25] wakes up
-% [1518-11-01 00:55] wakes up
-% [1518-11-02 00:40] falls asleep
-% [1518-11-03 00:05] Guard #10 begins shift
-% [1518-11-03 00:24] falls asleep
-% [1518-11-03 00:29] wakes up
-% [1518-11-04 00:02] Guard #99 begins shift
-% [1518-11-04 00:36] falls asleep
-% [1518-11-04 00:46] wakes up
-% [1518-11-01 00:30] falls asleep
-% [1518-11-05 00:03] Guard #99 begins shift
-% [1518-11-05 00:45] falls asleep
-% [1518-11-05 00:55] wakes up
-% [1518-11-02 00:50] wakes up">>,
 	BinList = string:split(string:trim(Body), "\n", all),
 	RecordList = lists:map(fun(Bin) -> to_record(Bin) end, BinList),
 	SortFun = fun(R1, R2) ->
@@ -33,13 +16,10 @@ process(Session) ->
 	end,
 	SortedList = lists:sort(SortFun, RecordList),
 	List = add_guard_id(SortedList),
-	io:format("~p~n", [lists:filter(fun(E) -> E#record.guard_id == 2351 end, List)]),
 	GuardList = maps:to_list(to_guards(List)),
 	SortFun2 = fun({_, T1}, {_, T2}) -> lists:sum(T1) > lists:sum(T2) end,
 	SortedGuards = lists:sort(SortFun2, GuardList),
-	%lists:map(fun({G, Ls}) -> io:format("~p ~p~n", [G, lists:sum(Ls)]) end, SortedGuards),
 	{Guard, TList} = hd(SortedGuards),
-	lists:map(fun(N) -> io:format("~p~n", [N]) end, TList),
 	Guard*get_index(TList, lists:max(TList), 0).
 
 get_index([H|_], H, I) -> I;
