@@ -17,8 +17,8 @@ count_all(Session) ->
 		count(Input) end,
 	lists:map(Fun, BinList).
 
-count([$+|T]) -> gen_server:cast(chronal_calibration, {plus, to_intger(T)});
-count([$-|T]) -> gen_server:cast(chronal_calibration, {minus, to_intger(T)});
+count([$+|T]) -> gen_server:cast(chronal_calibration, {plus, to_integer(T)});
+count([$-|T]) -> gen_server:cast(chronal_calibration, {minus, to_integer(T)});
 count(_) -> ignored.
 
 handle_cast({plus, N}, Frequency) ->
@@ -32,8 +32,8 @@ handle_cast({minus, N}, Frequency) ->
 
 handle_call(_, _, Frequency) -> Frequency.
 
-to_intger(List) -> to_intger(lists:reverse(List), 0, 0).
+to_integer(List) -> to_integer(lists:reverse(List), 0, 0).
 
-to_intger([], _, Result) -> Result;
-to_intger([N|T], P, Result) ->
-	to_intger(T, P + 1, Result + (N - 48) * trunc(math:pow(10, P))).
+to_integer([], _, Result) -> Result;
+to_integer([N|T], P, Result) ->
+	to_integer(T, P + 1, Result + (N - 48) * trunc(math:pow(10, P))).
