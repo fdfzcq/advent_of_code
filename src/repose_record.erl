@@ -50,7 +50,7 @@ incr([H|T], Time, N, List) -> incr(T, Time, N + 1, [H|List]).
 
 add_guard_id([R|T]) -> add_guard_id(T, R#record.guard_id, []).
 
-add_guard_id([], H, List) -> lists:reverse(List);
+add_guard_id([], _, List) -> lists:reverse(List);
 add_guard_id([H = #record{guard_id=undefined}|T], R, List) ->
 	NewRecord = H#record{guard_id=R#record.guard_id},
 	add_guard_id(T, NewRecord, [NewRecord|List]);
