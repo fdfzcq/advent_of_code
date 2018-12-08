@@ -9,17 +9,6 @@ process1(Session) ->
 	Map = to_map(List, #{}),
 	RMap = to_reverse_map($A, Map, #{}),
 	traverse($A, RMap, "").
-	% WList = lists:map(fun(X) -> {[X], 0} end, lists:seq($A, $Z)),
-	% WMap = to_weight_map($A, Map, maps:from_list(WList)),
-	% SortFun = fun({[X1], N1}, {[X2], N2}) ->
-	% 	case N1 == N2 of
-	% 		true -> X1 < X2;
-	% 		false -> N1 < N2
-	% 	end
-	% end,
-	% ResList = lists:sort(SortFun, maps:to_list(WMap)),
-	% {R, _} = hd(ResList),
-	% to_res(R, maps:from_list(ResList), Map, "", []).
 
 to_reverse_map(91, _, RMap) -> RMap;
 to_reverse_map(N, Map, RMap) ->
