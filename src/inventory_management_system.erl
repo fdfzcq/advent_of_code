@@ -1,6 +1,6 @@
 -module(inventory_management_system).
 %% aco day 2: inventory management system
--export([checksum/1, checksum/2]).
+-export([checksum/1, checksum/2, process2/1]).
 
 checksum(Session) ->
 	{ok, Body} = advent_of_code_client:get(2, Session),
@@ -30,3 +30,24 @@ add({A, B}, _) -> {A, B}.
 result({A, 0}) -> A;
 result({0, B}) -> B;
 result({A, B}) -> A * B.
+
+%% part 2
+
+process2(Session) ->
+	{ok, Body} = advent_of_code_client:get(2, Session),
+	[H|BinList] = string:split(string:trim(Body), "\n", all),
+	process2(H, BinList, BinList).
+
+process2(_, [], []) -> nil;
+process2(_, [], [H|T]) -> process2(H, T, T);
+process2(Bin, [H|T], List) ->
+	Str1 = binary_to_list(Bin),
+	Str2 = binary_to_list(H),
+	case lists:filter(fun(N) -> N =/= 0 end, lists:zipwith(fun(A, B) -> A - B end, Str1, Str2)) of
+		[_] -> merge(Str1, Str2, []);
+		_ -> process2(Bin, T, List)
+	end.
+
+merge([], [], Res) -> lists:reverse(Res);
+merge([S|T1], [S|T2], Res) -> merge(T1, T2, [S|Res]);
+merge([_|T1], [_|T2], Res) -> merge(T1, T2, Res).
