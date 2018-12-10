@@ -41,11 +41,12 @@ plot(List) ->
 
 plot(_, _, Y, _, {_, Y_MAX}, _) when Y > Y_MAX -> ok;
 plot(List, X, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, Res) when X > X_MAX ->
+	io:format("~p~n", [lists:reverse(Res)]),
 	%io:format("~p~n", [Res]),
-	case length(lists:filter(fun(P) -> P == $# end, Res)) > 1 of
-		true -> io:format("~p~n", [lists:reverse(Res)]);
-		false -> ok
-	end,
+	% case length(lists:filter(fun(P) -> P == $# end, Res)) > 1 of
+	% 	true -> io:format("~p~n", [lists:reverse(Res)]);
+	% 	false -> ok
+	% end,
 	plot(List, X_MIN, Y + 1, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, "");
 plot([{X, Y}|T], X, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, Res) ->
 	plot(T, X + 1, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, [$#|Res]);
