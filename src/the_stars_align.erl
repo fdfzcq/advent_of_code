@@ -4,13 +4,14 @@
 
 process(Session) ->
 	{ok, Body} = advent_of_code_client:get(10, Session),
-	BinList = string:split(string:trim(Body), "\n"),
+	BinList = string:split(string:trim(Body), "\n", all),
 	List = lists:map(fun(Bin) -> parse(Bin) end, BinList),
-	start(List, 0, 0).
+	start(List, 10239, 10241).
 
 start(_, Second, Second) -> ok;
 start(List, Second, LastSecond) ->
 	plot(calculate_velocity(List, Second, [])),
+	io:format("second: ~p ~n", [Second]),
 	start(List, Second + 1, LastSecond).
 
 calculate_velocity([], _, List) -> List;
@@ -25,6 +26,7 @@ parse(Bin) ->
 	{XP, YP, XV, YV}.
 
 plot(List) ->
+	%io:format("~p ~n", [List]),
 	ListX = lists:map(fun({X, _}) -> X end, List),
 	ListY = lists:map(fun({_, Y}) -> Y end, List),
 	X_MIN = lists:min(ListX),
@@ -48,7 +50,8 @@ plot(List, X, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, Res) when X > X_MAX ->
 	% 	false -> ok
 	% end,
 	plot(List, X_MIN, Y + 1, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, "");
-plot([{X, Y}|T], X, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, Res) ->
-	plot(T, X + 1, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, [$#|Res]);
 plot(List, X, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, Res) ->
-	plot(List, X + 1, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, [$.|Res]).
+	case lists:member({X, Y}, List) of
+		true -> plot(List, X + 1, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, [$#|Res]);
+		false -> plot(List, X + 1, Y, {X_MIN, X_MAX}, {Y_MIN, Y_MAX}, [$.|Res])
+	end.

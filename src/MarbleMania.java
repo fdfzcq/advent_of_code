@@ -5,9 +5,14 @@ public class MarbleMania {
 
 
 	public static void main(String[] args){
-		noOfPlayers = 0; // TO BE MODIFIED
-		lastMarble = 0; // TO BE MODIFIED
+		Date date1 = new Date();
+		long time1 = date1.getTime();
+		noOfPlayers = 413; // TO BE MODIFIED
+		lastMarble = 7108200; // TO BE MODIFIED
 		System.out.println(process());
+		Date date2 = new Date();
+		long time2 = date2.getTime();
+		System.out.println("Process took " + (time2 - time1) + " milliseconds" );
 	}
 
 	public static long process(){
