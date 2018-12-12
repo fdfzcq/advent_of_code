@@ -18,23 +18,17 @@ find_max(List, {301, Y}, L, Sum, {MaxPower, P, Size}) -> find_max(List, {1, Y + 
 find_max(List, {X, Y}, L, Sum, {MaxPower, P, Size}) when X + L > 300; Y + L > 300 ->
 	find_max(List, {X + 1, Y}, 0, Sum, {MaxPower, P, Size});
 find_max(List, {X, Y}, L, Sum, {MaxPower, P, Size}) ->
-	Cols = lists:nth(X + L, List),
-	Lines = lists:map(fun(LL) -> lists:nth(Y + L, LL) end, List),
+	Cols = lists:sublist(lists:nth(Y + L, List), X, L + 1),
+	Lines = lists:sublist(lists:map(fun(LL) -> lists:nth(X + L, LL) end, List), Y, L + 1),
 	io:format("STATE: ~p~n", [{Cols, Lines, {X, Y}, L}]),
-	NewSum = Sum + get_sum(Cols, Lines, L, 0, {X, Y}),
+	NewSum = Sum + get_sum(Cols, Lines, 0),
 	case NewSum > MaxPower of
 		true -> find_max(List, {X, Y}, L + 1, NewSum, {NewSum, {X, Y}, (L + 1) * (L + 1)});
 		false -> find_max(List, {X, Y}, L + 1, NewSum, {MaxPower, P, Size})
 	end.
 
-get_sum([H|_], [H|_], 0, Sum, _) -> Sum + H;
-get_sum([Hc|Tc], [Hl|Tl], N, Sum, {0, 0}) -> get_sum(Tc, Tl, N - 1, Sum + Hc + Hl, {0, 0});
-get_sum(Rows, [_|Tl], N, Sum, {0, Y}) -> 
-	io:format("0000: ~p~n", [{Tl, N}]),
-	get_sum(Rows, Tl, N, Sum, {0, Y - 1});
-get_sum([_|Tc], Lines, N, Sum, {X, Y}) ->
-	io:format("~p~n", [Tc]),
-	get_sum(Tc, Lines, N, Sum, {X - 1, Y}).
+get_sum([H], [H], Sum) -> Sum + H;
+get_sum([Hc|Tc], [Hl|Tl], Sum) -> get_sum(Tc, Tl, Sum + Hc + Hl).
 
 %% part 1
 
