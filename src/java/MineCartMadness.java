@@ -21,34 +21,30 @@ public class MineCartMadness{
 
 		boolean flag = true;
 
-
+		int r = 0;
 		while(flag){
-			int n = 0;
+			r++;
 			for(Cart cart: carts){
 				if(cart.active){
 					if(cart.direction == '^'){
 						charList[cart.y][cart.x] = cart.old == '0' ? '|' : cart.old;
 						cart.y = cart.y - 1;
 					}
-					if(cart.direction == 'v'){
+					else if(cart.direction == 'v'){
 						charList[cart.y][cart.x] = cart.old == '0' ? '|' : cart.old;
 						cart.y = cart.y + 1;
 					}
-					if(cart.direction == '<'){
+					else if(cart.direction == '<'){
 						charList[cart.y][cart.x] = cart.old == '0' ? '-' : cart.old;
 						cart.x = cart.x - 1;
 					}
-					if(cart.direction == '>'){
+					else if(cart.direction == '>'){
 						charList[cart.y][cart.x] = cart.old == '0' ? '-' : cart.old;
 						cart.x = cart.x + 1;
 					}
-					//System.out.println("X: " + cart.x + ", Y: " + cart.y + ", Dir: " + cart.direction);
 					if(charList[cart.y][cart.x] == 'v' || charList[cart.y][cart.x] == '^' || charList[cart.y][cart.x] == '<' || charList[cart.y][cart.x] == '>'){
-						// System.out.println("X: " + cart.x + ", Y: " + cart.y);
-						// flag = false;
 						for(Cart cart2: carts){
-							if(cart2.direction != cart.direction && cart2.y == cart.y && cart2.x == cart.x && cart2.active){
-								System.out.println("Collided X: " + cart.x + ", Y:" + cart.y + ", Dir: " + cart.direction + ", Old: " + cart2.old + ", Carts: " + cart + " and " + cart2);
+							if(cart2.direction == charList[cart.y][cart.x] && cart != cart2 && cart2.y == cart.y && cart2.x == cart.x && cart2.active && cart != cart2){
 								cart2.active = false;
 								cart.active = false;
 								charList[cart.y][cart.x] = cart2.old;
@@ -61,9 +57,10 @@ public class MineCartMadness{
 					}
 				}
 			}
+			int n = 0;	
 			for(Cart cart: carts){
 				if(cart.active){
-					System.out.println("X: " + cart.x + ", Y:" + cart.y + ", Dir: " + cart.direction + ", Size: " + carts.size());
+					System.out.println("Cart X: " + cart.x + ", Y: " + cart.y);
 					n++;
 				}
 			}
